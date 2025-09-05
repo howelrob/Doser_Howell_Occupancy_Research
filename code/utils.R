@@ -177,19 +177,19 @@ pref_sampling = function(n.plots=400, occ_prob, noise_factor=0.1, J=4900){
 
 
 
-data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads, method="random", n.plots=400, grid_h=2, grid_v=2,
-                           line_length=10, line_spacing=2, box_size=4, pref_noise=0.1){
+data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, method="random", n.plots=400, grid_h=2, grid_v=2,
+                           line_length=10, line_spacing=2, box_size=4, pref_noise=0.1, species_prev=-1, spatial_decay=3/.7){
   J.x <- x_axis
   J.y <- y_axis
   J <- J.x * J.y  # Total number of grid cells across the landscape
   n.rep <- sample(3, J, replace = TRUE)  # Number of hypothetical repeat surveys at each site. 
   # TODO: make the first element of beta here an input to the function that we can change.
-  beta <- c(-1, 0.2, 0.3)  # The occupancy parameters. The first is the intercept, then the effects of two simulated covariates. 
+  beta <- c(species_prev, 0.2, 0.3)  # The occupancy parameters. The first is the intercept, then the effects of two simulated covariates. 
   p.occ <- length(beta)  # Number of occupancy regression parameters.
   alpha <- c(0.3, 0.5)  # The detection parameters. The first is the intercept, second is a covariate.
   p.det <- length(alpha)  # Number of detection regression parameters.
   # TODO: make phi an input into the function. 
-  phi <- 3 / .7  # The spatial decay parameter. 
+  phi <- spatial_decay  # The spatial decay parameter. 
   sigma.sq <- 1.5  # The spatial variance parameter
   sp <- TRUE  # Indicates that we want to simulate with a spatial model
   cov.model = 'exponential'  # Using the exponential spatial covariance function. 
@@ -213,10 +213,14 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads, meth
     plot.indx = line_clusters(n.plots=n.plots, line_length=line_length, method="h", spacing=line_spacing, J=J, J.x=J.x, J.y=J.y)
   } else if (method == "v_line"){
     plot.indx = line_clusters(n.plots=n.plots, line_length=line_length, method="v", spacing=line_spacing, J=J, J.x=J.x, J.y=J.y)
-  } else if (method == "box_cluster"){
-    plot.indx = box_clusters(n.plots=n.plots, cluster_size=box_size, J=J, J.x=J.x, J.y=J.y)
-  } else if (method == "pref_sampling"){
-    plot.indx = pref_sampling(n.plots=n.plots, occ_prob=dat$psi, noise_factor=pref_noise, J=J)
+  } else if (method == "box4"){
+    plot.indx = box_clusters(n.plots=n.plots, cluster_size=4, J=J, J.x=J.x, J.y=J.y)
+  } else if (method == "box16"){
+    plot.indx = box_clusters(n.plots=n.plots, cluster_size=16, J=J, J.x=J.x, J.y=J.y)
+  } else if (method == "heavy_pref"){
+    plot.indx = pref_sampling(n.plots=n.plots, occ_prob=dat$psi, noise_factor=0.1, J=J)
+  } else if (method == "mod_pref"){
+    plot.indx = pref_sampling(n.plots=n.plots, occ_prob=dat$psi, noise_factor=0.3, J=J)
   } else {
     plot.indx = random_sampling(n.plots=n.plots, J=J)
   }
@@ -324,3 +328,5 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads, meth
   return(out.list)
   
 }
+
+
