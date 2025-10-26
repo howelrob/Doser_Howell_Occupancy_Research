@@ -1,3 +1,6 @@
+# 00_utils.R: script containing multiple functions used for generating data
+#             and running simulations. 
+# Author: Robbie Howell and Jeffrey W. Doser
 #Random Sampling
 random_sampling = function(n.plots=400, J=4900){
   plot.indx = sample(1:J, n.plots, replace=FALSE)
