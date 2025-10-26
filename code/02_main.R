@@ -14,25 +14,15 @@ replicates = as.numeric(args[3])
 
 # Set directories, which differ depending on if we run on our machines locally or 
 # if running on the NC State HPC
-# JWD: Robbie, replace the XXX with whatever your local computer names shows up as 
-#      in the "machine.name" variable.
 machine.name <- Sys.info()['nodename']
-if (machine.name == 'pop-os' | machine.name == 'XXX') {
+if (machine.name == 'pop-os' | machine.name == 'ROBBIESLAPTOP') {
   code_dir <- 'code/'
   results_dir <- 'results/full_sim_results/'
   data_dir <- 'data/'
 } else { # Running on NCSU HPC
-  # JWD: You'll need to tell the HPC the full absolute path to get to the desired 
-  #      location of the files. The "/share/doserlab/rmhowel3/" will not change, 
-  #      but you can change the name of the "occ_model_design", which should just
-  #      be the name of the folder on the HPC where you store the project contents. 
-  #      Within "occ_model_design", you should set up the same directory structure
-  #      as what I've laid out on the github repo (i.e., code, data, docs, figures, results).  
-  #      You could probably use scp to copy over the full contents of your local folder
-  #      to the remote "occ_model_design" on the HPC. 
-  code_dir <- '/share/doserlab/rmhowel3/occ_model_design/code/'
-  results_dir <- '/share/doserlab/rmhowel3/occ_model_design/results/'
-  data_dir <- '/share/doserlab/rmhowel3/occ_model_design/data/'
+  code_dir <- '/share/doserlab/rmhowel3/occ_research/code/'
+  results_dir <- '/share/doserlab/rmhowel3/occ_research/results/'
+  data_dir <- '/share/doserlab/rmhowel3/occ_research/data/'
 }
 
 # load utils methods and parameters csv
