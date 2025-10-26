@@ -5,6 +5,8 @@
 rm(list = ls())
 library(spOccupancy)
 
+set.seed(1357)
+
 # read in given arguments (three numbers, e.g. (first row, last row, replicates))
 args <- commandArgs(trailingOnly = TRUE)
 
