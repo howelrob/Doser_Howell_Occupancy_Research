@@ -49,7 +49,7 @@ for (i in 1:nrow(current_params)){
     output = data_simulation(n.neighbors=neighbors, method=design, species_prev=prevalence, spatial_decay=decay)
     
     #Need to save the output to a file
-    save(output, file=paste0(out.dir, 'occupancy-sampling-row-', i, '-replicate-', j, '-', 
+    save(output, file=paste0(results.dir, 'occupancy-sampling-row-', i, '-replicate-', j, '-', 
                              Sys.Date(), '.rda'))
   }  
 }
