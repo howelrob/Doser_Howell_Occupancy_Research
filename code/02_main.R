@@ -23,7 +23,7 @@ if (machine.name == 'pop-os' | machine.name == 'ROBBIESLAPTOP') {
   data_dir <- 'data/'
 } else { # Running on NCSU HPC
   code_dir <- '/share/doserlab/rmhowel3/occ_research/code/'
-  results_dir <- '/share/doserlab/rmhowel3/occ_research/results/'
+  results_dir <- '/share/doserlab/rmhowel3/occ_research/results/test/'
   data_dir <- '/share/doserlab/rmhowel3/occ_research/data/'
 }
 
