@@ -293,7 +293,7 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, me
                  priors = prior.list,
                  accept.rate = 0.43, 
                  cov.model = "exponential", 
-                 verbose = TRUE, 
+                 verbose = FALSE, 
                  NNGP = TRUE, 
                  n.neighbors = n.neighbors,
                  n.report = 50, 
@@ -309,7 +309,8 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, me
   
   # Predict occupancy probability at each cell in the study area (most of which 
   # do not have any observed data). 
-  out.pred <- predict(out, X.0 = X.0, coords.0 = coords.0, n.omp.threads = n.threads)
+  out.pred <- predict(out, X.0 = X.0, coords.0 = coords.0, n.omp.threads = n.threads, 
+                      verbose = FALSE)
   
   # Predicted occupancy probability at each grid cell
   psi.pred <- apply(out.pred$psi.0.samples, 2, median)
