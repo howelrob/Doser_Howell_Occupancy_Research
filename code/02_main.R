@@ -48,6 +48,7 @@ parameters <- read.csv(paste0(data_dir, 'parameters.csv'))
 current_params = parameters[curr_row,]
 n_iters = replicates
 # Current parameters
+n.plots = current_params$n.plots
 design = current_params$design
 prevalence = current_params$prevalence
 neighbors = current_params$n_neighbors
@@ -62,7 +63,7 @@ for (i in 1:n_iters) {
   print(paste0("Currently on iteration ", i, " out of ", n_iters))
   # JWD: also note that I changed the verbose argument in the spOccupancy functions
   #      inside data_simulation to not print the model progress output, otherwise it's clunky
-  output = data_simulation(n.neighbors=neighbors, method=design, species_prev=prevalence, spatial_decay=decay)
+  output = data_simulation(n.plots = n.plots, n.neighbors=neighbors, method=design, species_prev=prevalence, spatial_decay=decay)
   
   #Need to save the output to a file
   save(output, file=paste0(results_dir, 'occupancy-sampling-row-', curr_row, '-replicate-', i, '-', 

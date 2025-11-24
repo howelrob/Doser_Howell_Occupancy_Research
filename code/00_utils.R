@@ -9,14 +9,17 @@ random_sampling = function(n.plots=400, J=4900){
 
 
 #Grid Sampling
-grid_sampling = function(h_spacing=2, v_spacing=2, J.x=70, J.y=70){
+grid_sampling = function(n.plots=400, J.x=70, J.y=70){
   plot.indx = c()
   
-  #Adds 1 to the provided spacing values so that the spacing value is the number of empty spaces between plots
-  v_points = seq(from=1, to=J.y, by=v_spacing+1)
+  side.length = floor(sqrt(n.plots))
   
+  #Generates vertical indices of the rows
+  v_points = round(seq(from=1, to=J.y, length.out=side.length))
+  
+  #Loops through the vertical indices to fill out the rows horizontally
   for (i in v_points){
-    h_points = seq(from=1+(J.x*(i-1)), to=J.x*i, by=h_spacing+1)
+    h_points = round(seq(from=1+(J.x*(i-1)), to=J.x*i, length.out=side.length))
     plot.indx = c(plot.indx, h_points)
   }
   
@@ -47,7 +50,6 @@ line_clusters = function(n.plots=400, line_length=10, method="h", spacing=1, J=4
     #Add subsequent plots that will be sampled
     for (j in 1:num_lines){
       line_start = sample(avl_plts, 1, replace=FALSE)
-      plot.indx = c(plot.indx, line_start)
       
       for (k in 1:line_length-1){
         plot.indx = c(plot.indx, (line_start + k*spacing))
@@ -67,7 +69,6 @@ line_clusters = function(n.plots=400, line_length=10, method="h", spacing=1, J=4
     #Add subsequent plots to list of plots that will be sampled
     for (i in 1:num_lines){
       line_start = sample(avl_plts, 1, replace=FALSE)
-      plot.indx = c(plot.indx, line_start)
       
       for (j in 1:line_length-1){
         plot.indx = c(plot.indx, line_start + spacing*J.y*j)
@@ -211,7 +212,7 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, me
   
   #Simulate data collection
   if (method == "grid"){
-    plot.indx = grid_sampling(grid_h, grid_v, J.x=J.x, J.y=J.y)
+    plot.indx = grid_sampling(n.plots=n.plots, J.x=J.x, J.y=J.y)
   } else if (method == "h_line"){
     plot.indx = line_clusters(n.plots=n.plots, line_length=line_length, method="h", spacing=line_spacing, J=J, J.x=J.x, J.y=J.y)
   } else if (method == "v_line"){

@@ -3,6 +3,10 @@
 #                      different simulation runs. 
 # Author: Robbie Howell
 
+
+#Number of plots to "collect" data from
+n.plots = c(50, 100, 200, 400, 600)
+
 # Different types of plot location designs. 
 design = c("random", "grid", "h_line", "v_line", "box4", "box16", "heavy_pref", "mod_pref")
 
@@ -15,8 +19,10 @@ n_neighbors = c(5, 10, 15, 20, 25)
 # Five different values of spatial decay 
 spatial_decay = c(3/.1, 3/.3, 3/.5, 3/.7, 3/.9)
 
+
+
 # Determine all unique combinations of those parameter values and output to a csv.
-parameter_combinations = expand.grid(design=design, prevalence=species_prev, 
+parameter_combinations = expand.grid(n.plots = n.plots, design=design, prevalence=species_prev, 
                                      n_neighbors=n_neighbors, spatial_decay=spatial_decay)
 
 write.csv(parameter_combinations, "data/parameters.csv", row.names=FALSE)
