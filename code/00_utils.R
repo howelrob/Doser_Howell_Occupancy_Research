@@ -181,18 +181,15 @@ pref_sampling = function(n.plots=400, occ_prob, noise_factor=0.1, J=4900){
 
 
 
-data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, method="random", n.plots=400, grid_h=2, grid_v=2,
-                           line_length=10, line_spacing=2, box_size=4, pref_noise=0.1, species_prev=-1, spatial_decay=3/.7){
+data_simulation = function(x_axis=70, y_axis=70, species_prev=-1, spatial_decay=3/.7) {
   J.x <- x_axis
   J.y <- y_axis
   J <- J.x * J.y  # Total number of grid cells across the landscape
   n.rep <- sample(3, J, replace = TRUE)  # Number of hypothetical repeat surveys at each site. 
-  # TODO: make the first element of beta here an input to the function that we can change.
   beta <- c(species_prev, 0.2, 0.3)  # The occupancy parameters. The first is the intercept, then the effects of two simulated covariates. 
   p.occ <- length(beta)  # Number of occupancy regression parameters.
   alpha <- c(0.3, 0.5)  # The detection parameters. The first is the intercept, second is a covariate.
   p.det <- length(alpha)  # Number of detection regression parameters.
-  # TODO: make phi an input into the function. 
   phi <- spatial_decay  # The spatial decay parameter. 
   sigma.sq <- 1.5  # The spatial variance parameter
   sp <- TRUE  # Indicates that we want to simulate with a spatial model
@@ -202,14 +199,15 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, me
   # The simOcc() function generates data with the above characteristics. 
   dat <- simOcc(J.x = J.x, J.y = J.y, n.rep = n.rep, beta = beta, alpha = alpha, 
                 sigma.sq = sigma.sq, phi = phi, sp = sp, cov.model = cov.model)
-  #str(dat)
-  
-  
-  #Creating the simulated landscape
-  plot.df <- data.frame(x = dat$coords[, 1],
-                        y = dat$coords[, 2],
-                        occupancy = dat$psi)
-  
+
+  return(dat)
+}
+
+run_simulation <- function(dat, n.neighbors = 15, n.threads = 1, method = 'random',
+                           n.plots = 400, line_length = 10, line_spacing = 2) {
+  J <- nrow(dat$X)
+  J.x <- sqrt(J)
+  J.y <- sqrt(J)
   #Simulate data collection
   if (method == "grid"){
     plot.indx = grid_sampling(n.plots=n.plots, J.x=J.x, J.y=J.y)
@@ -228,7 +226,6 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, me
   } else {
     plot.indx = random_sampling(n.plots=n.plots, J=J)
   }
-  
   
   # Extract the data that we "collected" at the n.plots locations. 
   # The detection-nondetection data. 
@@ -277,10 +274,6 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, me
   # Number of burn-in (amount of samples you throw away at the beginning)
   n.burn <- 5000
   n.thin <- 5
-  # JWD: note that I changed this to 1. The number of MCMC simulations we're 
-  #      currently running for is sufficient enough to reach convergence for 
-  #      the parameters that we're interested in, so we don't need to take the 
-  #      extra time to run three chains for each simulation.
   n.chains <- 1
   
   
@@ -302,7 +295,7 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, me
                  n.thin = n.thin, 
                  n.chains = n.chains) 
   
-  #Prediction
+  # Prediction
   # Prediction covariates
   X.0 <- dat$X
   # Prediction coordinates
@@ -318,15 +311,9 @@ data_simulation = function(x_axis=70, y_axis=70, n.neighbors=15, n.threads=1, me
   # True occupancy probability at each grid cell
   psi.true <- dat$psi
   
-  # JWD: in addition to returning the median values of the occupancy estimates, 
-  #      we'll also want some measures of uncertainty. Here I extract two things: 
-  #      the lower and upper bound of a 95% credible interval, then the posterior
-  #      standard deviation. These are two ways to quantify uncertainty in a Bayesian
-  #      analysis. 
   psi.ci <- apply(out.pred$psi.0.samples, 2, quantile, probs = c(0.025, 0.975))
   psi.sd <- apply(out.pred$psi.0.samples, 2, sd)
   
-  # JWD: output the occupancy estimates and the true occupancy values. 
   out.list <- list(psi.est = psi.pred, psi.ci = psi.ci, 
                    psi.sd = psi.sd, psi.true = psi.true)
   
