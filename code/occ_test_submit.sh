@@ -39,13 +39,6 @@ do
 
   echo "Submit job = row:$start_row, replicates:$reps"
   
-  # This is the line of code that submits the script to the NCSU HPC. 
-  # -n: 1 core
-  # -W: allow it to run for 7200 minutes (if needed) before stopping 
-  # -R: realted to multi-threading on a single core, just using 1. We also tell how much memory we request for each core. 
-  # -q cnr: this is the specific queue we use which gives us priority when running on the HPC. 
-  # -oo name of the output file.
-  # -eo name of the error output file. 
   bsub -n 1 -W 7200 -R span[hosts=1] -R "rusage[mem=10]" -q cnr -oo out.02_main_test.$start_row -eo err.02_main_test.$start_row "Rscript 02_main.R $start_row $reps"
 
   ((start_row++))
