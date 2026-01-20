@@ -30,7 +30,7 @@ if (machine.name == 'pop-os' | machine.name == 'ROBBIESLAPTOP') {
     data_dir <- '/share/doserlab/jwdoser/DHB25/data/'
   } else { # Robbie running it 
     code_dir <- '/share/doserlab/rmhowel3/occ_research/code/'
-    results_dir <- '/share/doserlab/rmhowel3/occ_research/results/test/'
+    results_dir <- '/share/doserlab/rmhowel3/occ_research/results/'
     data_dir <- '/share/doserlab/rmhowel3/occ_research/data/'
           
   }
@@ -49,7 +49,7 @@ design <- current_params$design
 neighbors <- current_params$n_neighbors
   
 # Read in landscape parameters
-landscape_params <- read.csv(paste0(data.dir, "landscape_params.csv"))
+landscape_params <- read.csv(paste0(data_dir, "landscape_params.csv"))
 n_landscapes <- nrow(landscape_params)
 
 # Loop through each row of the given parameters
