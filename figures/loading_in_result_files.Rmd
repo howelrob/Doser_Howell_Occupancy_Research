@@ -15,6 +15,8 @@ library(ggplot2)
 
 ```{r}
 #Currently reading in 50 rows at a time with 30 replicates each 
+start_row = 1
+end_row = 50
 rows = 50
 landscapes = 10
 replicates = 30
@@ -23,7 +25,7 @@ cur_row = 1
 #Calculates the bias for each individual replicate
 bias_per_row = data.frame(matrix(NA, nrow=rows*replicates*landscapes, ncol=1))
 
-for (i in 1:rows){
+for (i in start_row:end_row){
   #Prints progress every 10 rows, takes a while due to many replicates & landscapes per row
   if (i %% 10 == 0){
     print(paste("Row:", i))
