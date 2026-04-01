@@ -22,8 +22,6 @@ if (machine.name == 'pop-os' | machine.name == 'ROBBIESLAPTOP') {
   results_dir <- 'results/full_sim_results/'
   data_dir <- 'data/'
 } else { # Running on NCSU HPC
-  # JWD: added in an option here so we can both run it if need be. I don't have
-  #      privileges to your folder on the HPC so I have to specify mine to get it to work.
   if (Sys.info()["user"] == 'jwdoser') { # Jeff running it
     code_dir <- '/share/doserlab/jwdoser/DHB25/code/'
     results_dir <- '/share/doserlab/jwdoser/DHB25/results/'

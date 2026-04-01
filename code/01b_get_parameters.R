@@ -1,6 +1,8 @@
 # 01_get_parameters.R: script to get a flat file of the different combination 
 #                      of parameter values that are used to determine the 
-#                      different simulation runs. 
+#                      different simulation runs. Each one of the parameter 
+#                      combinations will be run for one of the 1000 simulated 
+#                      landscapes. 
 # Author: Robbie Howell and Jeffrey Doser
 
 
