@@ -170,7 +170,7 @@ box_clusters = function(n.plots=400, cluster_size=4, J=4900, J.x=70, J.y=70){
 #Preferential Sampling
 pref_sampling = function(n.plots=400, occ_prob, noise_factor=0.1, J=4900){
   #Add uncertainty and scale the noisy data so there are no values above 1
-  noisy_psi = occ_prob + runif(J, 0, noise_factor)
+  noisy_psi = occ_prob + runif(J, -noise_factor, noise_factor)
   scaled_noise = (noisy_psi - min(noisy_psi)) / (max(noisy_psi) - min(noisy_psi))
   #Does have the side effect of giving one plot a 0% chance of being sampled and one plot a 100% chance
   
