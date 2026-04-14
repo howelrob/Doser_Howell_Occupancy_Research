@@ -1,8 +1,8 @@
-# 05b_extract_metrics_nonspatial.R: script to process the massive amount of results files
+# 05d_extract_metrics_nonspatial.R: script to process the massive amount of results files
 #                                   into the specific metrics that will be used to calculate 
 #                                   bias, coverage rates, and credible interval widths. This 
 #                                   file processes the nonspatial models for the 
-#                                   correctly specified scenario. 
+#                                   misspecification scenario 
 # Author: Jeffrey W. Doser and Robert M. Howell
 rm(list = ls())
 
@@ -73,7 +73,7 @@ for (i in 1:n_total) {
   curr_land <- which(land_params$prevalence == summary_df$prevalence[i] & 
                        land_params$decay == summary_df$sp_decay[i])
   tryCatch({
-    load(Sys.glob(paste0(results_dir, 'nonspatial-occupancy-sampling-row-', curr_row, 
+    load(Sys.glob(paste0(results_dir, 'misspec-nonspatial-occupancy-sampling-row-', curr_row, 
                          '-landscape-', curr_land, '-replicate-', 
                          summary_df$replicate[i], '-2026*.rda')))
     summary_df$bias[i] <- mean(output$psi.est - output$psi.true)
@@ -87,4 +87,4 @@ for (i in 1:n_total) {
 }
 
 # Save results to hard drive ----------------------------------------------
-save(summary_df, file = paste0(results_dir, "nonspatial_summary_sim_1_results.rda"))
+save(summary_df, file = paste0(results_dir, "misspec-nonspatial_summary_sim_2_results.rda"))
