@@ -269,6 +269,55 @@ fig_3 <- fig_3a + fig_3b + fig_3c + plot_layout(guides = "collect")
 ggsave(file = 'figures/Figure-3.png', width = 15, height = 5, units = 'in',
        bg = 'white')
 
+# Figure S1 ---------------------------------------------------------------
+# Number of neighbors by design 
+fig_s1a <- avg_by_scenario %>%
+  group_by(design, neighbors) %>% 
+  summarize(bias = mean(bias)) %>% 
+  mutate(design = factor(as.character(design), levels = design_levels, 
+                         labels = design_names)) %>%  
+  ggplot(aes(x = neighbors, y = bias, col = design)) + 
+    geom_line() +
+    geom_point() + 
+    geom_hline(yintercept = 0, linetype = 2, col = "black") + 
+    # scale_x_continuous(breaks = sort(unique(avg_by_scenario$n_plot)), 
+    #                    labels = sort(unique(avg_by_scenario$n_plot))) + 
+    theme_bw(base_size = 18) + 
+    scale_color_colorblind() + 
+    labs(x = "Number of Neighbors", y = "Bias (Estimated - True)", color = "Design", 
+         title = "(a) Bias") +
+    theme(text = element_text(family="LM Roman 10"))
+fig_s1b <- avg_by_scenario %>%
+  group_by(design, neighbors) %>% 
+  summarize(coverage = mean(coverage)) %>% 
+  mutate(design = factor(as.character(design), levels = design_levels, 
+                         labels = design_names)) %>%  
+  ggplot(aes(x = neighbors, y = coverage, col = design)) + 
+    geom_line() +
+    geom_point() + 
+    geom_hline(yintercept = 0.95, linetype = 2, col = "black") + 
+    theme_bw(base_size = 18) + 
+    scale_color_colorblind() + 
+    labs(x = "Number of Neighbors", y = "Coverage Rate", color = "Design", 
+         title = "(b) Coverage") +
+    theme(text = element_text(family="LM Roman 10"))
+fig_s1c <- avg_by_scenario %>%
+  group_by(design, neighbors) %>% 
+  summarize(ci_width = mean(ci_width)) %>% 
+  mutate(design = factor(as.character(design), levels = design_levels, 
+                         labels = design_names)) %>%  
+  ggplot(aes(x = neighbors, y = ci_width, col = design)) + 
+    geom_line() +
+    geom_point() + 
+    theme_bw(base_size = 18) + 
+    scale_color_colorblind() + 
+    labs(x = "Number of Neighbors", y = "95% CI Width", color = "Design", 
+         title = "(c) 95% CI width") +
+    theme(text = element_text(family="LM Roman 10"))
+fig_s1 <- fig_s1a + fig_s1b + fig_s1c + plot_layout(guides = "collect")
+ggsave(file = 'figures/Figure-S1.png', width = 15, height = 5, units = 'in',
+       bg = 'white')
+
 # Comparison of spatial and nonspatial model results ----------------------
 spatial_summary_df <- summary_df
 # Loads an object called summary_df
